@@ -1,19 +1,25 @@
-from prettytable import PrettyTable
+from prettytable import PrettyTable, from_csv
 
 table = PrettyTable()
 table.field_names = ['id', 'name', 'price', 'expires']
 
 
-def display_table():
+def display_table(sp):
+    
     """
     Display product table
     """
-
+    """
     table.add_row([1, 'First sample item', 1.23, 'JAN-01-2019'])
     table.add_row([2, 'Second sample item', 2.34, 'JAN-02-2019'])
     print(table)
     table.clear_rows()
+    """
 
+    with open('products.csv', 'r') as f:
+        prod_table = from_csv(f)
+    print(prod_table)
+    print(sp)    
 
 def start():
     """
@@ -25,7 +31,17 @@ def start():
         value = input('> ')
         if value == 'exit':
             break
-        display_table()
+        else:
+            values = value.split(' ')
+            if len(values) != 4:
+                print('Supply only 4 values or type exit')
+            else:
+                PRICE_MIN = values[0]
+                PRICE_MAX = values[1]
+                EXPIRES_START = values[2]
+                EXPIRES_STOP = values[3]
+                search_params = (PRICE_MIN, PRICE_MAX, EXPIRES_START, EXPIRES_STOP)
+                display_table(search_params)
 
 
 if __name__ == '__main__':
