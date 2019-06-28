@@ -18,8 +18,10 @@ def display_table(sp):
 
     with open('products.csv', 'r') as f:
         prod_table = from_csv(f)
-    print(prod_table)
-    print(sp)    
+
+    PRICE_MIN, PRICE_MAX, EXPIRES_START, EXPIRES_STOP = sp
+    t = prod_table.get_string(header=False, border=False, start=0, end=10)
+    print(t) 
 
 def start():
     """
