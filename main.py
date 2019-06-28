@@ -1,16 +1,25 @@
-from prettytable import PrettyTable, from_csv
+from prettytable import PrettyTable
 import csv
 from datetime import datetime
+
 
 table = PrettyTable()
 table.field_names = ['id', 'name', 'price', 'expires']
 
 
-def all_params(sp):
+def display_table(sp):
     """
-    All search paramaters where supplied
+    Display product table
     """
     PRICE_MIN, PRICE_MAX, EXPIRES_START, EXPIRES_STOP = sp
+    if '*' in PRICE_MIN:
+        PRICE_MIN = 0
+    if '*' in PRICE_MAX:
+        PRICE_MAX = 999999
+    if '*' in EXPIRES_START:
+        EXPIRES_START = '01/01/1970'
+    if '*' in EXPIRES_STOP:
+        EXPIRES_STOP = '12/31/3000'
     with open('products.csv', 'r') as prod_csv:
         csv_reader = csv.DictReader(prod_csv, delimiter=',')
 
@@ -31,48 +40,6 @@ def all_params(sp):
                 table.add_row([row['id'], row['name'], row['price'], row['expires']])
     print(table)
     table.clear_rows()
-
-
-def star_params(sp):
-    """
-    A * was used in the search parameters
-    """
-
-    #TODO: add logic for the * when searching
-
-    PRICE_MIN, PRICE_MAX, EXPIRES_START, EXPIRES_STOP = sp
-    my_dict = {'PRICE_MIN': False,'PRICE_MAX': False,'EXPIRES_START': False,'EXPIRES_STOP': False}
-    if '*' in PRICE_MIN:
-        my_dict['PRICE_MIN'] = True
-    if '*' in PRICE_MAX:
-        my_dict['PRICE_MAX'] = True
-    if '*' in EXPIRES_START:
-        my_dict['EXPIRES_START'] = True
-    if '*' in EXPIRES_STOP:
-        my_dict['EXPIRES_STOP'] = True
-
-    for k, v in my_dict.items():
-        pass
-
-
-
-
-
-    with open('products.csv', 'r') as prod_csv:
-        csv_reader = csv.DictReader(prod_csv, delimiter=',')
-        for row in csv_reader:
-            pass
-
-
-def display_table(sp):
-    """
-    Display product table
-    """
-    PRICE_MIN, PRICE_MAX, EXPIRES_START, EXPIRES_STOP = sp
-    if '*' in PRICE_MIN or '*' in PRICE_MAX or '*' in EXPIRES_START or '*' in EXPIRES_STOP:
-        star_params(sp)
-    else:
-        all_params(sp)
 
 
 def start():
